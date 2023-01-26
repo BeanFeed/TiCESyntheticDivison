@@ -21,9 +21,15 @@ char *str_replace(char *str, char rep, char with) {
     return str;
 }
 
-void shortenStrF(char *str)
+char *shortenStrF(char *str)
 {
-    
+    while(str[(strlen(str)) - 1] == '0') {
+        str[(strlen(str)) - 1] = '\0';
+    }
+    if(str[(strlen(str)) - 1] == '.') {
+        str[(strlen(str)) - 1] = '\0';
+    }
+    return str;
 }
 
 int main(void)
@@ -54,14 +60,16 @@ int main(void)
         //dbg_printf("first: %f\n", nums[1]);
     }
     dbg_printf("first: %f\n", nums[0]);
-    char divStr[2];
+    char divStr[10];
     float divNum;
-    os_GetStringInput("Dividing Number: ", divStr,2);
+    os_GetStringInput("Dividing Number: ", divStr,10);
     os_SetCursorPos(polyLength + 2,0);
 
     divNum = strtof(str_replace(divStr,'\x1A','-'), NULL);
     char out[20];
-    sprintf(out,"%f",nums[0]);
+    char buf[20];
+    sprintf(buf,"%f", nums[0]);
+    sprintf(out,"%s", shortenStrF(buf));
     float outNums[10];
     outNums[0] = nums[0];
     for(int i = 1; i < polyLength; i++) {
@@ -70,13 +78,13 @@ int main(void)
         outNums[i] = nextNum;
     }
     for(int i = 1; i < polyLength; i++) {
-        char *buf;
-        sprintf(buf,"%f",outNums[i]);
-        buf = shortenStrF(buf);
-        sprintf(out,"%s, %s",out, buf);
-        free(buf);
+        char buf1[20];
+        sprintf(buf1,"%f",outNums[i]);
+        sprintf(out,"%s, %s",out, shortenStrF(buf1));
     }
     os_PutStrLine(out);
+    os_SetCursorPos(polyLength + 3,0);
+    os_PutStrLine("Press Any Key To Exit");
     while(!os_GetCSC());
     return 0;
 }
