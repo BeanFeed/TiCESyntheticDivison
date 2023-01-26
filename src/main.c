@@ -21,6 +21,27 @@ char *str_replace(char *str, char rep, char with) {
     return str;
 }
 
+char *shortenStrF(char *str)
+{
+    char *ptr = str;
+    int zeroLoc = -1;
+    int pastDeci = 0;
+    for(int i = 0; i < strlen(ptr); i++)
+    {
+        if(ptr[i] == '.') pastDeci = 1;
+        else if(ptr[i] == '0' && pastDeci == 1) zeroLoc = i;
+    }
+    if(zeroLoc == -1) {
+        for(int i = 0; i < strlen(ptr) && zeroLoc == -1; i++) {
+            if(ptr[i] == '.') zeroLoc = 1;
+        }
+    }
+    //char *buf;
+    for(int i = zeroLoc; i < strlen(ptr); i++) {
+        ptr[i] = NULL;
+    }
+    return str;
+}
 
 int main(void)
 {
@@ -31,7 +52,7 @@ int main(void)
     os_GetStringInput("Polynomial Length: ", pL,5);
     os_SetCursorPos(1,0);
     polyLength = strtod(pL, NULL);
-    float nums[polyLength];
+    float nums[10];
     dbg_printf("polyLength: %d\n",polyLength);
 
     for(int i = 0; i < polyLength; i++) {
@@ -57,18 +78,22 @@ int main(void)
 
     divNum = strtof(str_replace(divStr,'\x1A','-'), NULL);
     char out[20];
-    float outNums[polyLength];
-    float prevNum = nums[0];
+    sprintf(out,"%f",nums[0]);
+    float outNums[10];
     outNums[0] = nums[0];
     for(int i = 1; i < polyLength; i++) {
-        float nextNum = (prevNum * divNum) + nums[i]; 
-        prevNum = nextNum;
+        float nextNum = (outNums[i-1] * divNum) + nums[i];
+        dbg_printf("Next Num: %f\n", nextNum);
         outNums[i] = nextNum;
     }
-    for(int i = 0; i < polyLength; i++) {
-        sprintf(out,"%s, %f",out, outNums[i]);
+    for(int i = 1; i < polyLength; i++) {
+        char *buf;
+        sprintf(buf,"%f",outNums[i]);
+        buf = shortenStrF(buf);
+        sprintf(out,"%s, %s",out, buf);
+        free(buf);
     }
     os_PutStrLine(out);
-    //while(!os_GetCSC());
+    while(!os_GetCSC());
     return 0;
 }
