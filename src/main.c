@@ -21,26 +21,9 @@ char *str_replace(char *str, char rep, char with) {
     return str;
 }
 
-char *shortenStrF(char *str)
+void shortenStrF(char *str)
 {
-    char *ptr = str;
-    int zeroLoc = -1;
-    int pastDeci = 0;
-    for(int i = 0; i < strlen(ptr); i++)
-    {
-        if(ptr[i] == '.') pastDeci = 1;
-        else if(ptr[i] == '0' && pastDeci == 1) zeroLoc = i;
-    }
-    if(zeroLoc == -1) {
-        for(int i = 0; i < strlen(ptr) && zeroLoc == -1; i++) {
-            if(ptr[i] == '.') zeroLoc = 1;
-        }
-    }
-    //char *buf;
-    for(int i = zeroLoc; i < strlen(ptr); i++) {
-        ptr[i] = NULL;
-    }
-    return str;
+    
 }
 
 int main(void)
