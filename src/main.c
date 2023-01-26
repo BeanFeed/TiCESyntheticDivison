@@ -65,8 +65,7 @@ int main(void)
         prevNum = nextNum;
         outNums[i] = nextNum;
     }
-    int outNumSize = sizeof(outNums);
-    for(int i = 0; i < outNumSize; i++) {
+    for(int i = 0; i < polyLength; i++) {
         sprintf(out,"%s, %f",out, outNums[i]);
     }
     os_PutStrLine(out);
