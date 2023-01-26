@@ -30,18 +30,20 @@ int main(void)
     char pL[5];
     os_GetStringInput("Polynomial Length: ", pL,5);
     os_SetCursorPos(1,0);
-    polyLength = atoi(pL);
+    polyLength = strtod(pL, NULL);
     float nums[polyLength];
-    dbg_printf("polyLength: %d",polyLength);
+    dbg_printf("polyLength: %d\n",polyLength);
+
     for(int i = 0; i < polyLength; i++) {
-        char pL[5];
+        char p[5];
         char prompt[10];
         sprintf(prompt,"Num%d: ",i + 1);
-        os_GetStringInput(prompt,pL,5);
-        dbg_printf("input: %s\n", pL);
+        os_GetStringInput(prompt,p,5);
+        dbg_printf("input: %s\n", p);
         os_SetCursorPos(i + 2,0);
-        //char *newpL = str_replace(pL,"\x1A","-");
-        nums[i] = strtof(str_replace(pL,'\x1A','-'), NULL);
+        char *newpL = str_replace(p,'\x1A','-');
+        nums[i] = strtof(newpL,NULL);
+        free(newpL);
         //dbg_printf("inputAsNum: %f\n", atof(newpL));
         dbg_printf("inputAsNum: %f\n", nums[i]);
         //free(newpL);
@@ -68,6 +70,6 @@ int main(void)
         sprintf(out,"%s, %f",out, outNums[i]);
     }
     os_PutStrLine(out);
-    while(!os_GetCSC());
+    //while(!os_GetCSC());
     return 0;
 }
